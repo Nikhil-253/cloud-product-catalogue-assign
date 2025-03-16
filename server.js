@@ -35,6 +35,18 @@ sql.connect(dbConfig)
     .then(() => console.log('✅ Connected to Azure SQL Database'))
     .catch(err => console.error('❌ Database Connection Failed:', err));
 
+
+app.get("/test-db", async (req, res) => {
+        try {
+            await db.query("SELECT 1");
+            res.json({ success: true, message: "DB Connection successful" });
+        } catch (err) {
+            console.error("DB Connection error:", err.message);
+            res.status(500).json({ error: "Database connection failed" });
+        }
+    });
+    
+
 // Default Route
 app.get('/', (req, res) => {
     res.send('Product Management API is running...');
