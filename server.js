@@ -3,6 +3,7 @@ const express = require('express');
 const sql = require('mssql');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -10,6 +11,8 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(express.static(__dirname));
 
 // MSSQL Connection Config
 const dbConfig = {
@@ -51,21 +54,13 @@ app.get("/test-db", async (req, res) => {
 });
     
 
-
-app.get("/test-db", async (req, res) => {
-        try {
-            await db.query("SELECT 1");
-            res.json({ success: true, message: "DB Connection successful" });
-        } catch (err) {
-            console.error("DB Connection error:", err.message);
-            res.status(500).json({ error: "Database connection failed" });
-        }
-    });
-    
-
 // Default Route
 app.get('/', (req, res) => {
     res.send('Product Management API is running...');
+});
+
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/products', async (req, res) => {
