@@ -46,7 +46,7 @@ app.get('/products', async (req, res) => {
         const result = await pool.request().query("SELECT * FROM products");
         res.json(result.recordset);
     } catch (err) {
-        console.error("Error fetching products:", err);
+        console.error("Error fetching products:", err.message);
         res.status(500).json({ error: "Failed to fetch products" });
     }
 });
