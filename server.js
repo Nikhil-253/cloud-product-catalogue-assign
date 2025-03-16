@@ -32,8 +32,24 @@ console.log("DB_PORT:", process.env.DB_PORT);
 
 // Connect to Database
 sql.connect(dbConfig)
-    .then(() => console.log('✅ Connected to Azure SQL Database'))
-    .catch(err => console.error('❌ Database Connection Failed:', err));
+    .then((pool) => {
+        console.log("✅ Connected to Azure SQL Database");
+        global.dbPool = pool; // Store the connection pool globally
+    })
+    .catch(err => console.error("❌ Database Connection Failed:", err));
+
+// Test database connection
+app.get("/test-db", async (req, res) => {
+    try {
+        const pool = await sql.connect(dbConfig); // Ensure connection
+        const result = await pool.request().query("SELECT 1"); // Use connection pool
+        res.json({ success: true, data: result.recordset });
+    } catch (err) {
+        console.error("DB Connection error:", err.message);
+        res.status(500).json({ error: "Database connection failed", details: err.message });
+    }
+});
+    
 
 
 app.get("/test-db", async (req, res) => {
