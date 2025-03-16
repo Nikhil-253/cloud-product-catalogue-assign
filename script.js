@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     fetchProducts();
 });
+const API_BASE_URL = "http://productcatalogueapp-e2f9eufwctghamcq.centralus-01.azurewebsites.net"; 
 
 function fetchProducts() {
-    fetch("http://localhost:5000/products")
+    fetch("API_BASE_URL/products")
         .then(response => response.json())
         .then(data => {
             const tableBody = document.querySelector("#productTable tbody");
@@ -32,7 +33,7 @@ function fetchProducts() {
 function placeOrder(productId) {
     const orderQuantity = document.getElementById(`order-${productId}`).value;
 
-    fetch("http://localhost:5000/order", {
+    fetch("API_BASE_URL/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId, orderQuantity })

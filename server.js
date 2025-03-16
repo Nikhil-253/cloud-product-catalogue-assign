@@ -51,17 +51,6 @@ app.get('/products', async (req, res) => {
     }
 });
 
-app.get('/products', async (req, res) => {
-    try {
-        const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query("SELECT * FROM products");
-        res.json(result.recordset);
-    } catch (err) {
-        console.error("Error fetching products:", err);
-        res.status(500).json({ error: "Failed to fetch products" });
-    }
-});
-
 
 app.post('/order', async (req, res) => {
     const { productId, orderQuantity } = req.body;
